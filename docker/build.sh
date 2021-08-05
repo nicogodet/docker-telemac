@@ -14,6 +14,6 @@ fi
 
 echo "Cleaning object files..."
 
-rm -rf ${HOMETELE}/builds/obj/*
+rm -rf ${HOMETEL}/builds/obj/*
 
 echo "Finished $0"
