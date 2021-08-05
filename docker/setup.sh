@@ -7,7 +7,7 @@ if [[ $TELEMAC_MAJOR_VER == "v7"  ]]; then
     PYTHON_PKGS="python python-pip"
     PIP_PKGS="numpy matplotlib==2.0.2 scipy jupyter"
     export PYTHON="python"
-        
+
     sed -i 's/<partel.par>/PARTEL.PAR/' ${TELEMAC_ROOT}/systel.cfg
 else
     PYTHON_PKGS="python3 python3-pip"
@@ -23,8 +23,9 @@ apt-get -o Dpkg::Options::="--force-confold" upgrade -q -y
 apt-get -o Dpkg::Options::="--force-confold" install -q -y \
     libopenmpi-dev openmpi-bin gfortran subversion less \
     cmake swig vim curl zlib1g-dev ${PYTHON_PKGS}
+rm -rf /var/lib/apt/lists/*
 
-${PYTHON} -m pip install ${PIP_PKGS}
+${PYTHON} -m pip --no-cache-dir install ${PIP_PKGS}
 
 # vendor libs
 
@@ -42,6 +43,9 @@ HDF_REL=hdf5-1.10.6
 
 MEDHOME=${VENDOR_HOME}/med
 MED_REL=med-4.0.0
+
+SCOTCHHOME=${VENDOR_HOME}/scotch
+SCOTCH_REL=scotch_6.1.1
 
 # METIS
 curl -Ls http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/${METIS_REL}.tar.gz | tar xvz
@@ -72,6 +76,13 @@ make
 make install
 cd ..
 rm -rf ${MED_REL}
+
+# SCOTCH
+curl -Ls https://gforge.inria.fr/frs/download.php/file/38443/${SCOTCH_REL}.tar.gz | tar xvz
+cd ${SCOTCH_REL}/src && ln -s Make.inc/Makefile.inc.x86-64_pc_linux2 Makefile.inc
+make
+make prefix=${SCOTCHHOME} install
+cd /tmp && rm -rf ${SCOTCH_REL}
 
 # FIXME
 # AED latest?

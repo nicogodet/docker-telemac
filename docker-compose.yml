@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
     telemac-mascaret:
-        image: flussplan/telemac:v8-latest
+        image: nicogodet/telemac:v8-latest
         stdin_open: true
         tty: true
         volumes:
