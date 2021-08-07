@@ -4,14 +4,14 @@
 
 TELEMAC_MAJOR_VER=$(echo $TELEMAC_MASCARET_VER | cut -c 1-2)
 if [[ $TELEMAC_MAJOR_VER == "v7"  ]]; then
-    PYTHON_PKGS="python python-pip"
+    PYTHON_PKGS="nano python python-pip"
     PIP_PKGS="numpy matplotlib==2.0.2 scipy jupyter"
     export PYTHON="python"
 
     sed -i 's/<partel.par>/PARTEL.PAR/' ${TELEMAC_ROOT}/systel.cfg
 else
-    PYTHON_PKGS="python3 python3-pip"
-    PIP_PKGS="numpy matplotlib scipy jupyter"
+    PYTHON_PKGS="nano python3 python3-pip"
+    PIP_PKGS="numpy matplotlib scipy jupyter mpi4py pandas"
     export PYTHON="python3"
     export PYTHON_VERSION=3
 fi
@@ -19,8 +19,8 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
-apt-get -o Dpkg::Options::="--force-confold" upgrade -q -y
-apt-get -o Dpkg::Options::="--force-confold" install -q -y \
+apt-get -o Dpkg::Options::="--force-confold" upgrade --no-install-suggests -q -y
+apt-get -o Dpkg::Options::="--force-confold" install --no-install-suggests -q -y \
     libopenmpi-dev openmpi-bin gfortran subversion less \
     cmake swig vim curl zlib1g-dev ${PYTHON_PKGS}
 rm -rf /var/lib/apt/lists/*
